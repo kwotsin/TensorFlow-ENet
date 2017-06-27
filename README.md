@@ -28,7 +28,7 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 - **get_class_weights.py**: The file to obtain either the median frequency balancing class weights, or the custom ENet                                   function class weights.
 
 
-**TensorBoard Visualizations:** Execute `tensorboard --logdir=log` on your root directory to monitor your training and watch your segmentation output form against the ground truth as you train.
+**TensorBoard Visualizations:** Execute `tensorboard --logdir=log` on your root directory to monitor your training and watch your segmentation output form against the ground truth and the original image as you train your model.
 
 
 **Note:** To use the checkpoint model, please set the argument `--stage_two_repeat=3` in both `train_enet.py` and `test_enet.py` as the checkpoint was trained on a slightly deeper version of ENet using 3 stage_two bottleneck series instead of the default 2.

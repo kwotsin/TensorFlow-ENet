@@ -4,17 +4,17 @@ TensorFlow implementation of [**ENet: A Deep Neural Network Architecture for Rea
 This model was tested on the CamVid dataset with street scenes taken from Cambridge, UK. For more information, please visit: http://mi.eng.cam.ac.uk/research/projects/VideoRec/CamVid/
 
 
-### Visualizations
+## Visualizations
 Note that the gifs may be out of sync if the network doesn't load them together. You can refresh your page to see them in sync.
 
-##### Original Video Input
+### Original Video Input
 ![CamVid Test Dataset Output](https://github.com/kwotsin/TensorFlow-ENet/blob/master/visualizations/original.gif)
 
-##### Test Dataset Output
+### Test Dataset Output
 ![CamVid Test Dataset Output](https://github.com/kwotsin/TensorFlow-ENet/blob/master/visualizations/output.gif)
 
 
-### Contents
+## Contents
 - **enet.py**: The ENet model definition, including the argument scope.
 
 - **train_enet.py**: The file for training. Includes saving of images for visualization and tunable hyperparameters.
@@ -34,7 +34,7 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 **Note:** To use the checkpoint model, please set the argument `--stage_two_repeat=3` in both `train_enet.py` and `test_enet.py` as the checkpoint was trained on a slightly deeper version of ENet using 3 stage_two bottleneck series instead of the default 2.
 
 
-### Important Notes
+## Important Notes
 1. As the Max Unpooling layer is not officially available from TensorFlow, a manual implementation was used to build the decoder portion of the network. This was based on the implementation suggested in this [TensorFlow github issue](https://github.com/tensorflow/tensorflow/issues/2169).
 
 2. Batch normalization and 2D Spatial Dropout are still retained during testing for good performance. 
@@ -45,7 +45,7 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 
 5. No preprocessing is done to the images for ENet. (see references below on clarifications with author), 
 
-### Implementation and Architectural Changes
+## Implementation and Architectural Changes
 1. By default, skip connections are added to connect the corresponding encoder and decoder portions for better performance.
 
 2. The number of initial blocks and the depth of stage 2 residual bottlenecks are tunable hyperparameters, to allow you to build a deeper network if required, since ENet is rather lightweight.
@@ -54,7 +54,7 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 
 4. To obtain the class weights for computing the weighted loss, Median Frequency Balancing (MFB) is used by default instead of the custom ENet class weighting function. This is due to an observation that MFB gives a slightly better performance than the custom function, at least on my machine. However, the option of using the ENet custom class weights is still possible.
 
-### References
+## References
 1. [ENet: A Deep Neural Network Architecture for Real-Time Semantic Segmentation](https://arxiv.org/pdf/1606.02147.pdf)
 2. [Implementation of Max Unpooling](https://github.com/tensorflow/tensorflow/issues/2169)
 3. [Implementation of PReLU](https://stackoverflow.com/questions/39975676/how-to-implement-prelu-activation-in-tensorflow)

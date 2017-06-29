@@ -7,11 +7,8 @@ This model was tested on the CamVid dataset with street scenes taken from Cambri
 ## Visualizations
 Note that the gifs may be out of sync if the network doesn't load them together. You can refresh your page to see them in sync.
 
-### Original Video Input
-![CamVid Test Dataset Output](https://github.com/kwotsin/TensorFlow-ENet/blob/master/visualizations/original.gif)
-
 ### Test Dataset Output
-![CamVid Test Dataset Output](https://github.com/kwotsin/TensorFlow-ENet/blob/master/visualizations/output.gif)
+![CamVid Test Dataset Output](https://github.com/kwotsin/TensorFlow-ENet/blob/master/visualizations/original.gif) ![CamVid Test Dataset Output](https://github.com/kwotsin/TensorFlow-ENet/blob/master/visualizations/output.gif)
 
 
 ## Contents

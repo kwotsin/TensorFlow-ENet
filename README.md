@@ -10,6 +10,9 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 ### Test Dataset Output
 ![CamVid Test Dataset Output](https://github.com/kwotsin/TensorFlow-ENet/blob/master/visualizations/original.gif) ![CamVid Test Dataset Output](https://github.com/kwotsin/TensorFlow-ENet/blob/master/visualizations/output.gif)
 
+### TensorBoard Visualizations
+Execute `tensorboard --logdir=log` on your root directory to monitor your training and watch your segmentation output form against the ground truth and the original image as you train your model.
+
 
 ## Contents
 
@@ -35,9 +38,6 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 
 - **checkpoint**: The checkpoint directory that could be used for predicting the segmentation output. The model was trained using the default parameters mentioned in the paper, except that it uses median frequency balancing to obtain the class weights.
 - **visualizations**: Contains the gif files that were created from the output of `predict_segmentation.py`.
-
-
-**TensorBoard Visualizations:** Execute `tensorboard --logdir=log` on your root directory to monitor your training and watch your segmentation output form against the ground truth and the original image as you train your model.
 
 
 ## Important Notes

@@ -12,6 +12,8 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 
 
 ## Contents
+
+#### Code
 - **enet.py**: The ENet model definition, including the argument scope.
 
 - **train_enet.py**: The file for training. Includes saving of images for visualization and tunable hyperparameters.
@@ -25,9 +27,9 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 - **get_class_weights.py**: The file to obtain either the median frequency balancing class weights, or the custom ENet                                   function class weights.
 - **train.sh**: Example training script to train the different variations of the model.
 
-- **train.sh** Example testing script to test the different variants you trained.
+- **test.sh** Example testing script to test the different variants you trained.
 
-
+#### Folders
 
 - **dataset**: Contains 6 folders that holds the original train-val-test images and their corresponding ground truth annotations.
 

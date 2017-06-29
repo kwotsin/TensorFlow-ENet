@@ -70,3 +70,6 @@ Execute `tensorboard --logdir=log` on your root directory to monitor your traini
 5. [Original Torch implementation of ENet](https://github.com/e-lab/ENet-training)
 6. [ResNet paper for clarification on residual bottlenecks](https://arxiv.org/pdf/1512.03385.pdf)
 7. [Colouring scheme](https://github.com/alexgkendall/SegNet-Tutorial/blob/c922cc4a4fcc7ce279dd998fb2d4a8703f34ebd7/Scripts/test_segmentation_camvid.py)
+
+## Feedback and Bugs
+This implementation may not be entirely correct and may contain bugs. It would be great if the open source community can spot any bugs and raise a github issue/submit a pull request to fix those bugs if any!

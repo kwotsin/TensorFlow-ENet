@@ -1,7 +1,7 @@
 # TensorFlow-ENet
 TensorFlow implementation of [**ENet: A Deep Neural Network Architecture for Real-Time Semantic Segmentation**](https://arxiv.org/pdf/1606.02147.pdf).
 
-This model was tested on the CamVid dataset with street scenes taken from Cambridge, UK. For more information, please visit: http://mi.eng.cam.ac.uk/research/projects/VideoRec/CamVid/
+This model was tested on the CamVid dataset with street scenes taken from Cambridge, UK. For more information on this dataset, please visit: http://mi.eng.cam.ac.uk/research/projects/VideoRec/CamVid/
 
 
 ## Visualizations

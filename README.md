@@ -51,7 +51,7 @@ Execute `tensorboard --logdir=log` on your root directory to monitor your traini
 
 5. No preprocessing is done to the images for ENet. (see references below on clarifications with author).
 
-6. Once you've fine-tuned to get your best hyperparamters, there's an option to combine the training and validation datasets together. However, if your training dataset is large enough, this won't make a lot of difference.
+6. Once you've fine-tuned to get your best hyperparameters, there's an option to combine the training and validation datasets together. However, if your training dataset is large enough, this won't make a lot of difference.
 
 ## Implementation and Architectural Changes
 1. By default, skip connections are added to connect the corresponding encoder and decoder portions for better performance.

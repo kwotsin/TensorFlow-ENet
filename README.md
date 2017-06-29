@@ -23,12 +23,19 @@ Note that the gifs may be out of sync if the network doesn't load them together.
 - **predict_segmentation.py**: Obtains the segmentation output for visualization purposes. You can create your own gif with                                  these outputs.
 
 - **get_class_weights.py**: The file to obtain either the median frequency balancing class weights, or the custom ENet                                   function class weights.
+- **train.sh**: Example training script to train the different variations of the model.
+
+- **train.sh** Example testing script to test the different variants you trained.
+
+
+
+- **dataset**: Contains 6 folders that holds the original train-val-test images and their corresponding ground truth annotations.
+
+- **checkpoint**: The checkpoint directory that could be used for predicting the segmentation output. The model was trained using the default parameters mentioned in the paper, except that it uses median frequency balancing to obtain the class weights.
+- **visualizations**: Contains the gif files that were created from the output of `predict_segmentation.py`.
 
 
 **TensorBoard Visualizations:** Execute `tensorboard --logdir=log` on your root directory to monitor your training and watch your segmentation output form against the ground truth and the original image as you train your model.
-
-
-**Note:** To use the checkpoint model, please set the argument `--stage_two_repeat=3` in both `train_enet.py` and `test_enet.py` as the checkpoint was trained on a slightly deeper version of ENet using 3 stage_two bottleneck series instead of the default 2.
 
 
 ## Important Notes

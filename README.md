@@ -56,7 +56,7 @@ Execute `tensorboard --logdir=log` on your root directory to monitor your traini
 ## Implementation and Architectural Changes
 1. By default, skip connections are added to connect the corresponding encoder and decoder portions for better performance.
 
-2. The number of initial blocks and the depth of stage 2 residual bottlenecks are tunable hyperparameters, to allow you to build a deeper network if required, since ENet is rather lightweight.
+2. The number of initial blocks and the depth of stage 2 residual bottlenecks are tunable hyperparameters. This allows you to build a deeper network if required, since ENet is rather lightweight.
 
 3. Fused batch normalization is used over standard batch normalization for faster computations. See [TensorFlow's best practices](https://www.tensorflow.org/performance/performance_guide).
 

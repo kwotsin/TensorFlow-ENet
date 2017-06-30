@@ -64,130 +64,130 @@ num_steps_per_epoch = num_batches_per_epoch
 
 #=============EVALUATION=================
 def run():
-	with tf.Graph().as_default() as graph:
-		tf.logging.set_verbosity(tf.logging.INFO)
+    with tf.Graph().as_default() as graph:
+        tf.logging.set_verbosity(tf.logging.INFO)
 
-		#===================TEST BRANCH=======================
-		#Load the files into one input queue
-		images = tf.convert_to_tensor(image_files)
-		annotations = tf.convert_to_tensor(annotation_files)
-		input_queue = tf.train.slice_input_producer([images, annotations])
+        #===================TEST BRANCH=======================
+        #Load the files into one input queue
+        images = tf.convert_to_tensor(image_files)
+        annotations = tf.convert_to_tensor(annotation_files)
+        input_queue = tf.train.slice_input_producer([images, annotations])
 
-		#Decode the image and annotation raw content
-		image = tf.read_file(input_queue[0])
-		image = tf.image.decode_image(image, channels=3)
-		annotation = tf.read_file(input_queue[1])
-		annotation = tf.image.decode_image(annotation)
+        #Decode the image and annotation raw content
+        image = tf.read_file(input_queue[0])
+        image = tf.image.decode_image(image, channels=3)
+        annotation = tf.read_file(input_queue[1])
+        annotation = tf.image.decode_image(annotation)
 
-		#preprocess and batch up the image and annotation
-		preprocessed_image, preprocessed_annotation = preprocess(image, annotation, image_height, image_width)
-		images, annotations = tf.train.batch([preprocessed_image, preprocessed_annotation], batch_size=batch_size, allow_smaller_final_batch=True)
+        #preprocess and batch up the image and annotation
+        preprocessed_image, preprocessed_annotation = preprocess(image, annotation, image_height, image_width)
+        images, annotations = tf.train.batch([preprocessed_image, preprocessed_annotation], batch_size=batch_size, allow_smaller_final_batch=True)
 
-		#Create the model inference
-		with slim.arg_scope(ENet_arg_scope()):
-			logits, probabilities = ENet(images,
-										 num_classes,
-										 batch_size=batch_size,
-										 is_training=True,
-										 reuse=None,
-										 num_initial_blocks=num_initial_blocks,
-										 stage_two_repeat=stage_two_repeat,
-										 skip_connections=skip_connections)
+        #Create the model inference
+        with slim.arg_scope(ENet_arg_scope()):
+            logits, probabilities = ENet(images,
+                                         num_classes,
+                                         batch_size=batch_size,
+                                         is_training=True,
+                                         reuse=None,
+                                         num_initial_blocks=num_initial_blocks,
+                                         stage_two_repeat=stage_two_repeat,
+                                         skip_connections=skip_connections)
 
-		# Set up the variables to restore and restoring function from a saver.
-		exclude = []
-		variables_to_restore = slim.get_variables_to_restore(exclude=exclude)
+        # Set up the variables to restore and restoring function from a saver.
+        exclude = []
+        variables_to_restore = slim.get_variables_to_restore(exclude=exclude)
 
-		saver = tf.train.Saver(variables_to_restore)
-		def restore_fn(sess):
-			return saver.restore(sess, checkpoint_file)
+        saver = tf.train.Saver(variables_to_restore)
+        def restore_fn(sess):
+            return saver.restore(sess, checkpoint_file)
 
-		#perform one-hot-encoding on the ground truth annotation to get same shape as the logits
-		annotations = tf.reshape(annotations, shape=[batch_size, image_height, image_width])
-		annotations_ohe = tf.one_hot(annotations, num_classes, axis=-1)
-		annotations = tf.cast(annotations, tf.int64)
+        #perform one-hot-encoding on the ground truth annotation to get same shape as the logits
+        annotations = tf.reshape(annotations, shape=[batch_size, image_height, image_width])
+        annotations_ohe = tf.one_hot(annotations, num_classes, axis=-1)
+        annotations = tf.cast(annotations, tf.int64)
 
-		#State the metrics that you want to predict. We get a predictions that is not one_hot_encoded.
-		predictions = tf.argmax(probabilities, -1)
-		accuracy, accuracy_update = tf.contrib.metrics.streaming_accuracy(predictions, annotations)
-		mean_IOU, mean_IOU_update = tf.contrib.metrics.streaming_mean_iou(predictions=predictions, labels=annotations, num_classes=num_classes)
-		per_class_accuracy, per_class_accuracy_update = tf.metrics.mean_per_class_accuracy(labels=annotations, predictions=predictions, num_classes=num_classes)
-		metrics_op = tf.group(accuracy_update, mean_IOU_update, per_class_accuracy_update)
+        #State the metrics that you want to predict. We get a predictions that is not one_hot_encoded.
+        predictions = tf.argmax(probabilities, -1)
+        accuracy, accuracy_update = tf.contrib.metrics.streaming_accuracy(predictions, annotations)
+        mean_IOU, mean_IOU_update = tf.contrib.metrics.streaming_mean_iou(predictions=predictions, labels=annotations, num_classes=num_classes)
+        per_class_accuracy, per_class_accuracy_update = tf.metrics.mean_per_class_accuracy(labels=annotations, predictions=predictions, num_classes=num_classes)
+        metrics_op = tf.group(accuracy_update, mean_IOU_update, per_class_accuracy_update)
 
-		#Create the global step and an increment op for monitoring
-		global_step = get_or_create_global_step()
-		global_step_op = tf.assign(global_step, global_step + 1) #no apply_gradient method so manually increasing the global_step
+        #Create the global step and an increment op for monitoring
+        global_step = get_or_create_global_step()
+        global_step_op = tf.assign(global_step, global_step + 1) #no apply_gradient method so manually increasing the global_step
 
-		#Create a evaluation step function
-		def eval_step(sess, metrics_op, global_step):
-			'''
-			Simply takes in a session, runs the metrics op and some logging information.
-			'''
-			start_time = time.time()
-			_, global_step_count, accuracy_value, mean_IOU_value, per_class_accuracy_value = sess.run([metrics_op, global_step_op, accuracy, mean_IOU, per_class_accuracy])
-			time_elapsed = time.time() - start_time
+        #Create a evaluation step function
+        def eval_step(sess, metrics_op, global_step):
+            '''
+            Simply takes in a session, runs the metrics op and some logging information.
+            '''
+            start_time = time.time()
+            _, global_step_count, accuracy_value, mean_IOU_value, per_class_accuracy_value = sess.run([metrics_op, global_step_op, accuracy, mean_IOU, per_class_accuracy])
+            time_elapsed = time.time() - start_time
 
-			#Log some information
-			logging.info('Global Step %s: Streaming Accuracy: %.4f     Streaming Mean IOU: %.4f     Per-class Accuracy: %.4f (%.2f sec/step)',
-						 global_step_count, accuracy_value, mean_IOU_value, per_class_accuracy_value, time_elapsed)
+            #Log some information
+            logging.info('Global Step %s: Streaming Accuracy: %.4f     Streaming Mean IOU: %.4f     Per-class Accuracy: %.4f (%.2f sec/step)',
+                         global_step_count, accuracy_value, mean_IOU_value, per_class_accuracy_value, time_elapsed)
 
-			return accuracy_value, mean_IOU_value, per_class_accuracy_value
+            return accuracy_value, mean_IOU_value, per_class_accuracy_value
 
-		#Create your summaries
-		tf.summary.scalar('Monitor/test_accuracy', accuracy)
-		tf.summary.scalar('Monitor/test_mean_per_class_accuracy', per_class_accuracy)
-		tf.summary.scalar('Monitor/test_mean_IOU', mean_IOU)
-		my_summary_op = tf.summary.merge_all()
+        #Create your summaries
+        tf.summary.scalar('Monitor/test_accuracy', accuracy)
+        tf.summary.scalar('Monitor/test_mean_per_class_accuracy', per_class_accuracy)
+        tf.summary.scalar('Monitor/test_mean_IOU', mean_IOU)
+        my_summary_op = tf.summary.merge_all()
 
-		#Define your supervisor for running a managed session. Do not run the summary_op automatically or else it will consume too much memory
-		sv = tf.train.Supervisor(logdir = logdir, summary_op = None, init_fn=restore_fn)
+        #Define your supervisor for running a managed session. Do not run the summary_op automatically or else it will consume too much memory
+        sv = tf.train.Supervisor(logdir = logdir, summary_op = None, init_fn=restore_fn)
 
-		#Run the managed session
-		with sv.managed_session() as sess:
-			for step in range(int(num_steps_per_epoch * num_epochs)):
-				#print vital information every start of the epoch as always
-				if step % num_batches_per_epoch == 0:
-					accuracy_value, mean_IOU_value = sess.run([accuracy, mean_IOU])
-					logging.info('Epoch: %s/%s', step / num_batches_per_epoch + 1, num_epochs)
-					logging.info('Current Streaming Accuracy: %.4f', accuracy_value)
-					logging.info('Current Streaming Mean IOU: %.4f', mean_IOU_value)
-					
-				#Compute summaries every 10 steps and continue evaluating
-				if step % 10 == 0:
-					test_accuracy, test_mean_IOU, test_per_class_accuracy = eval_step(sess, metrics_op = metrics_op, global_step = sv.global_step)
-					summaries = sess.run(my_summary_op)
-					sv.summary_computed(sess, summaries)
-					
-				#Otherwise just run as per normal
-				else:
-					test_accuracy, test_mean_IOU, test_per_class_accuracy = eval_step(sess, metrics_op = metrics_op, global_step = sv.global_step)
+        #Run the managed session
+        with sv.managed_session() as sess:
+            for step in range(int(num_steps_per_epoch * num_epochs)):
+                #print vital information every start of the epoch as always
+                if step % num_batches_per_epoch == 0:
+                    accuracy_value, mean_IOU_value = sess.run([accuracy, mean_IOU])
+                    logging.info('Epoch: %s/%s', step / num_batches_per_epoch + 1, num_epochs)
+                    logging.info('Current Streaming Accuracy: %.4f', accuracy_value)
+                    logging.info('Current Streaming Mean IOU: %.4f', mean_IOU_value)
+                    
+                #Compute summaries every 10 steps and continue evaluating
+                if step % 10 == 0:
+                    test_accuracy, test_mean_IOU, test_per_class_accuracy = eval_step(sess, metrics_op = metrics_op, global_step = sv.global_step)
+                    summaries = sess.run(my_summary_op)
+                    sv.summary_computed(sess, summaries)
+                    
+                #Otherwise just run as per normal
+                else:
+                    test_accuracy, test_mean_IOU, test_per_class_accuracy = eval_step(sess, metrics_op = metrics_op, global_step = sv.global_step)
 
-			#At the end of all the evaluation, show the final accuracy
-			logging.info('Final Streaming Accuracy: %.4f', test_accuracy)
-			logging.info('Final Mean IOU: %.4f', test_mean_IOU)
-			logging.info('Final Per Class Accuracy %.4f', test_per_class_accuracy)
+            #At the end of all the evaluation, show the final accuracy
+            logging.info('Final Streaming Accuracy: %.4f', test_accuracy)
+            logging.info('Final Mean IOU: %.4f', test_mean_IOU)
+            logging.info('Final Per Class Accuracy %.4f', test_per_class_accuracy)
 
-			#Show end of evaluation
-			logging.info('Finished evaluating!')
+            #Show end of evaluation
+            logging.info('Finished evaluating!')
 
-			#Save the images
-			if save_images:
-				if not os.path.exists(photo_dir):
-					os.mkdir(photo_dir)
+            #Save the images
+            if save_images:
+                if not os.path.exists(photo_dir):
+                    os.mkdir(photo_dir)
 
-				#Save the image visualizations for the first 10 images.
-				logging.info('Saving the images now...')
-				predictions_val, annotations_val = sess.run([predictions, annotations])
+                #Save the image visualizations for the first 10 images.
+                logging.info('Saving the images now...')
+                predictions_val, annotations_val = sess.run([predictions, annotations])
 
-				for i in xrange(10):
-					predicted_annotation = predictions_val[i]
-					annotation = annotations_val[i]
+                for i in xrange(10):
+                    predicted_annotation = predictions_val[i]
+                    annotation = annotations_val[i]
 
-					plt.subplot(1,2,1)
-					plt.imshow(predicted_annotation)
-					plt.subplot(1,2,2)
-					plt.imshow(annotation)
-					plt.savefig(photo_dir+"/image_" + str(i))
+                    plt.subplot(1,2,1)
+                    plt.imshow(predicted_annotation)
+                    plt.subplot(1,2,2)
+                    plt.imshow(annotation)
+                    plt.savefig(photo_dir+"/image_" + str(i))
 
 if __name__ == '__main__':
-	run()
+    run()

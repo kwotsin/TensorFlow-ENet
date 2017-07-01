@@ -1,7 +1,7 @@
 # TensorFlow-ENet
 TensorFlow implementation of [**ENet: A Deep Neural Network Architecture for Real-Time Semantic Segmentation**](https://arxiv.org/pdf/1606.02147.pdf).
 
-This model was tested on the CamVid dataset with street scenes taken from Cambridge, UK. For more information on this dataset, please visit: http://mi.eng.cam.ac.uk/research/projects/VideoRec/CamVid/
+This model was tested on the CamVid dataset with street scenes taken from Cambridge, UK. For more information on this dataset, please visit: http://mi.eng.cam.ac.uk/research/projects/VideoRec/CamVid/.
 
 
 ## Visualizations
@@ -36,7 +36,8 @@ Execute `tensorboard --logdir=log` on your root directory to monitor your traini
 
 - **dataset**: Contains 6 folders that holds the original train-val-test images and their corresponding ground truth annotations.
 
-- **checkpoint**: The checkpoint directory that could be used for predicting the segmentation output. The model was trained using the default parameters mentioned in the paper, except that it uses median frequency balancing to obtain the class weights.
+- **checkpoint**: The checkpoint directory that could be used for predicting the segmentation output. The model was trained using the default parameters mentioned in the paper, except that it uses median frequency balancing to obtain the class   weights. The final checkpoint model size is under 5MB.
+
 - **visualizations**: Contains the gif files that were created from the output of `predict_segmentation.py`.
 
 
@@ -54,7 +55,7 @@ Execute `tensorboard --logdir=log` on your root directory to monitor your traini
 6. Once you've fine-tuned to get your best hyperparameters, there's an option to combine the training and validation datasets together. However, if your training dataset is large enough, this won't make a lot of difference.
 
 ## Implementation and Architectural Changes
-1. By default, skip connections are added to connect the corresponding encoder and decoder portions for better performance.
+1. Skip connections can be added to connect the corresponding encoder and decoder portions for better performance.
 
 2. The number of initial blocks and the depth of stage 2 residual bottlenecks are tunable hyperparameters. This allows you to build a deeper network if required, since ENet is rather lightweight.
 

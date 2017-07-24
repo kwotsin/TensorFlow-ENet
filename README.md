@@ -3,6 +3,8 @@ TensorFlow implementation of [**ENet: A Deep Neural Network Architecture for Rea
 
 This model was tested on the CamVid dataset with street scenes taken from Cambridge, UK. For more information on this dataset, please visit: http://mi.eng.cam.ac.uk/research/projects/VideoRec/CamVid/.
 
+**Requirements:**
+TensorFlow >= r1.2
 
 ## Visualizations
 Note that the gifs may be out of sync if the network doesn't load them together. You can refresh your page to see them in sync.

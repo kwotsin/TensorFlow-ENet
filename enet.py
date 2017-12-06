@@ -424,7 +424,7 @@ def ENet(inputs,
             #=================INITIAL BLOCK=================
             net = initial_block(inputs, scope='initial_block_1')
             for i in xrange(2, max(num_initial_blocks, 1) + 1):
-                net = initial_block(inputs, num_channels = num_channels, scope='initial_block_' + str(i))
+                net = initial_block(net, num_channels = num_channels, scope='initial_block_' + str(i))
 
             #Save for skip connection later
             if skip_connections:

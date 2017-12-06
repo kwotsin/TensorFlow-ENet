@@ -422,7 +422,8 @@ def ENet(inputs,
              slim.arg_scope([slim.batch_norm], fused=True), \
              slim.arg_scope([slim.conv2d, slim.conv2d_transpose], activation_fn=None): 
             #=================INITIAL BLOCK=================
-            for i in xrange(1, max(num_initial_blocks, 1) + 1):
+            net = initial_block(inputs, scope='initial_block_1')
+            for i in xrange(2, max(num_initial_blocks, 1) + 1):
                 net = initial_block(inputs, num_channels = num_channels, scope='initial_block_' + str(i))
 
             #Save for skip connection later

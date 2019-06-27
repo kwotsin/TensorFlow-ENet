@@ -14,7 +14,7 @@ flags = tf.app.flags
 
 #Directories
 flags.DEFINE_string('dataset_dir', './dataset', 'The dataset directory to find the train, validation and test images.')
-flags.DEFINE_string('checkpoint_dir', './log/original', 'The checkpoint directory to restore your mode.l')
+flags.DEFINE_string('checkpoint_dir', './checkpoint/', 'The checkpoint directory to restore your mode.l')
 flags.DEFINE_string('logdir', './log/original_test', 'The log directory for event files created during test evaluation.')
 flags.DEFINE_boolean('save_images', True, 'If True, saves 10 images to your logdir for visualization.')
 

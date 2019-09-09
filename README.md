@@ -76,3 +76,18 @@ Execute `tensorboard --logdir=log` on your root directory to monitor your traini
 
 ## Feedback and Bugs
 This implementation may not be entirely correct and may contain bugs. It would be great if the open source community can spot any bugs and raise a github issue/submit a pull request to fix those bugs if any!
+
+## Citation
+If you are using this work for your research, please consider citing:
+```
+@misc{kwot_sin_lee_2019_3403269,
+  author       = {Kwot Sin Lee},
+  title        = {kwotsin/TensorFlow-ENet: DOI},
+  month        = sep,
+  year         = 2019,
+  doi          = {10.5281/zenodo.3403269},
+  url          = {https://doi.org/10.5281/zenodo.3403269}
+}
+```
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3403269.svg)](https://doi.org/10.5281/zenodo.3403269)
+

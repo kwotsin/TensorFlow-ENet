@@ -80,11 +80,11 @@ This implementation may not be entirely correct and may contain bugs. It would b
 ## Citation
 If you are using this work for your research, please consider citing:
 ```
-@misc{kwot_sin_lee_2019_3403269,
+@misc{kwot_sin_lee_2017_3403269,
   author       = {Kwot Sin Lee},
   title        = {kwotsin/TensorFlow-ENet: DOI},
-  month        = sep,
-  year         = 2019,
+  month        = jun,
+  year         = 2017,
   doi          = {10.5281/zenodo.3403269},
   url          = {https://doi.org/10.5281/zenodo.3403269}
 }
